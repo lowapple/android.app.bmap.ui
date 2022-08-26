@@ -1,4 +1,4 @@
-name: seoul_iot
+name: bmap
 description: A new Flutter module project.
 
 # The following defines the version and build number for your application.
@@ -29,6 +29,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   coordinator_layout: ^1.0.0+1
   fl_chart: ^0.55.1
+  sqflite: ^2.0.3+1
+  path: ^1.8.1
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:
@@ -82,5 +85,5 @@ flutter:
   # identifiers, which may be completely independent or the same as these.
   module:
     androidX: true
-    androidPackage: seoul_iot.seoul_iot
-    iosBundleIdentifier: seouliot.seoulIot
+    androidPackage: bmap.ui
+#    iosBundleIdentifier: seouliot.seoulIot
