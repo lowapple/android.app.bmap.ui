@@ -59,13 +59,21 @@ class MyApp extends StatelessWidget {
       //   primaryColor: Colors.white,
       //   primarySwatch: Colors.lightBlue,
       // ),
-      initialRoute: "/navigation",
+      // initialRoute: "/",
       routes: {
-        "/": (context) => const PageParkingDetail(),
         "/like": (context) => const PageParkingLike(),
-        "/parking_detail": (context) => const PageParkingDetail(),
+        "/parking": (context) => const PageParkingDetail(),
         "/navigation": (context) => const NavigationPage()
       },
     );
+  }
+}
+
+class EmptyPage extends StatelessWidget {
+  const EmptyPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold();
   }
 }

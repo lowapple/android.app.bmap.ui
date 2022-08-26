@@ -4,6 +4,7 @@ import 'package:bmap/models/like_model.dart';
 import 'package:bmap/pages/parking_like.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PageParkingLikeEditor extends StatefulWidget {
   final LikeModel? likeModel;
@@ -47,7 +48,7 @@ class _PageParkingLikeEditorState extends State<PageParkingLikeEditor> {
             centerTitle: true,
             title: const Text(
               "자주 가는 주차장",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.black, fontSize: 18),
             ),
             elevation: 0,
             backgroundColor: Colors.white,
@@ -179,6 +180,8 @@ class _PageParkingLikeEditorState extends State<PageParkingLikeEditor> {
                       FocusManager.instance.primaryFocus?.unfocus();
                       await Future.delayed(const Duration(milliseconds: 200));
                       await _dataStorageLocal.insertLikeItem(_likeModel);
+                      //
+                      Fluttertoast.showToast(msg: "즐겨찾기에 추가되었습니다");
                       Navigator.of(context).pop();
                     },
                     height: 48,

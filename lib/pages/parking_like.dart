@@ -102,7 +102,7 @@ class _PageParkingLikeState extends State<PageParkingLike> {
           appBar: AppBar(
             title: const Text(
               "자주 가는 주차장",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.black, fontSize: 18),
             ),
             elevation: 0,
             centerTitle: true,

@@ -152,7 +152,11 @@ class ParkingHeader extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(Icons.arrow_back_ios, color: cc),
                     onPressed: () {
-                      SystemNavigator.pop();
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      } else {
+                        SystemNavigator.pop();
+                      }
                     },
                   ),
                 ),

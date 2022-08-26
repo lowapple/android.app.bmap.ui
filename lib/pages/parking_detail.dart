@@ -215,69 +215,79 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
       )
     ];
 
-    return Scaffold(
-      backgroundColor: const Color(0xffe7e7e7),
-      bottomSheet: Container(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Expanded(
-              child: MaterialButton(
-            onPressed: () async {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const NavigationPage()));
-            },
-            height: 48,
-            color: const Color(0xffFFE146),
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-                side: const BorderSide(color: Color(0xffFFE146)),
-                borderRadius: BorderRadius.circular(10)),
-            child: const Text(
-              "목적지 설정",
-              style: TextStyle(fontWeight: FontWeight.bold),
+    return WillPopScope(
+        child: Scaffold(
+          backgroundColor: const Color(0xffe7e7e7),
+          bottomSheet: Container(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Expanded(
+                  child: MaterialButton(
+                onPressed: () async {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const NavigationPage()));
+                },
+                height: 48,
+                color: const Color(0xffFFE146),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    side: const BorderSide(color: Color(0xffFFE146)),
+                    borderRadius: BorderRadius.circular(10)),
+                child: const Text(
+                  "목적지 설정",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              )),
             ),
-          )),
-        ),
-      ),
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverAppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            pinned: true,
-            snap: false,
-            floating: false,
-            expandedHeight: 270,
-            flexibleSpace: ParkingHeader(
-              parkingTitle: _parkDetail.parkName ?? '한영 빌딩 주차장',
-              parkingTags:
-                  _currentFacilities.map((e) => e['name'].toString()).toList(),
-              parkingAddress: _parkDetail.newAddr ?? '서울 중구 세종대로 93(태평로2가)',
-            ),
-            bottom: const PreferredSize(
-                preferredSize: Size.fromHeight(0), child: SizedBox()),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return items[index];
+          body: CustomScrollView(
+            controller: _scrollController,
+            slivers: <Widget>[
+              SliverAppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                pinned: true,
+                snap: false,
+                floating: false,
+                expandedHeight: 270,
+                flexibleSpace: ParkingHeader(
+                  parkingTitle: _parkDetail.parkName ?? '한영 빌딩 주차장',
+                  parkingTags: _currentFacilities
+                      .map((e) => e['name'].toString())
+                      .toList(),
+                  parkingAddress: _parkDetail.newAddr ?? '서울 중구 세종대로 93(태평로2가)',
+                ),
+                bottom: const PreferredSize(
+                    preferredSize: Size.fromHeight(0), child: SizedBox()),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return items[index];
 
-                // return Container(
-                //   color: index.isOdd ? Colors.white : Colors.black12,
-                //   height: 100.0,
-                //   child: Center(
-                //     child: Text('$index', textScaleFactor: 5),
-                //   ),
-                // );
-              },
-              childCount: items.length,
-            ),
+                    // return Container(
+                    //   color: index.isOdd ? Colors.white : Colors.black12,
+                    //   height: 100.0,
+                    //   child: Center(
+                    //     child: Text('$index', textScaleFactor: 5),
+                    //   ),
+                    // );
+                  },
+                  childCount: items.length,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ),
+        onWillPop: () async {
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          } else {
+            SystemNavigator.pop();
+          }
+          return true;
+        });
   }
 
   Widget _parkingIoTStatBox() {
@@ -512,18 +522,17 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
                               text: TextSpan(
                                   text: "지난 주",
                                   style: const TextStyle(
-                                      color: Color(0xff505967), fontSize: 13),
+                                      color: Color(0xff505967), fontSize: 12),
                                   children: [
                                 TextSpan(
                                     text: "$selectedWeekend요일",
                                     style: const TextStyle(
                                         color: Color(0xff3182F6),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 13)),
+                                        fontSize: 12)),
                                 TextSpan(
-                                    text:
-                                        "은 오후 $selectedMaxHour시에 가장 인기가 많았어요.",
-                                    style: const TextStyle(fontSize: 13))
+                                    text: "은 $selectedMaxHour시에 가장 인기가 많았어요.",
+                                    style: const TextStyle(fontSize: 12))
                               ])),
                         ],
                       ),
@@ -548,7 +557,7 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
                                       color: Color(0xff505967), fontSize: 13),
                                   children: [
                                 TextSpan(
-                                    text: "은 오후 $weeklyMaxHour시에 가장 이용이 많아요",
+                                    text: "은 $weeklyMaxHour시에 가장 이용이 많아요",
                                     style: const TextStyle(fontSize: 13))
                               ])),
                         ],
@@ -621,7 +630,7 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
       child: Row(
         children: [
           Expanded(
-            child: roundedIconButton((Icons.star_border), "즐겨찾기", () async {
+            child: roundedIconButton('assets/ic_like.png', "즐겨찾기", () async {
               final id = _parkDetail.parkCode!.toString();
               var cid = utf8.encode(id).reduce((a, b) => a + b);
 
@@ -636,12 +645,12 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
             }),
           ),
           Expanded(
-            child: roundedIconButton((Icons.edit), "신고", () async {
+            child: roundedIconButton('assets/ic_business.png', "신고", () async {
               await platform.invokeMethod("launchReport");
             }),
           ),
           Expanded(
-            child: roundedIconButton((Icons.ios_share), "공유", () async {}),
+            child: roundedIconButton('assets/ic_share.png', "공유", () async {}),
           )
         ],
       ),
@@ -785,7 +794,7 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
     );
   }
 
-  Widget roundedIconButton(IconData icon, String text, VoidCallback callback) {
+  Widget roundedIconButton(String icon, String text, VoidCallback callback) {
     return Column(
       children: [
         ButtonTheme(
@@ -798,10 +807,7 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
                 side: const BorderSide(color: Colors.grey),
                 borderRadius: BorderRadius.circular(25)),
             onPressed: callback,
-            child: Icon(
-              icon,
-              size: 30,
-            ),
+            child: Image.asset(icon),
           ),
         ),
         const SizedBox(
