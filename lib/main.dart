@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: '서울시 IOT 해커톤',
       // theme: ThemeData(
       //   primaryColor: Colors.white,

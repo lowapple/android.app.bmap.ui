@@ -332,7 +332,7 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
                                 fontSize: 16, color: Color(0xff6B7684)),
                             children: [
                           TextSpan(
-                              text: _parkDetail.nowParkCount ?? "1",
+                              text: "${_parkDetail.nowParkCount ?? "1"}",
                               style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.red,

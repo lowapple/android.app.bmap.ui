@@ -5,8 +5,8 @@ class ParkDetail {
   String? latitude;
   String? longitude;
   String? parkState;
-  String? nowParkCount;
-  String? maxParkCount;
+  int? nowParkCount;
+  int? maxParkCount;
 
   ParkDetail(
       {this.parkCode,
