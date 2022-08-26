@@ -33,14 +33,14 @@ class ParkingLikeMethod {
   }
 }
 
-class PageParkingLikePage extends StatefulWidget {
-  const PageParkingLikePage({Key? key}) : super(key: key);
+class PageParkingLike extends StatefulWidget {
+  const PageParkingLike({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _PageParkingLikePageState();
+  State<StatefulWidget> createState() => _PageParkingLikeState();
 }
 
-class _PageParkingLikePageState extends State<PageParkingLikePage> {
+class _PageParkingLikeState extends State<PageParkingLike> {
   final _dataStorageLocal = getIt<DataStorageLocal>();
 
   List<LikeModel>? likeModels;
@@ -96,38 +96,46 @@ class _PageParkingLikePageState extends State<PageParkingLikePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "자주 가는 주차장",
-          style: TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: () {},
-        ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 1,
-            color: Colors.grey,
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: items,
+    return WillPopScope(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: const Text(
+              "자주 가는 주차장",
+              style: TextStyle(color: Colors.black),
             ),
-          )
-        ],
-      ),
-    );
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => false);
+                SystemNavigator.pop();
+              },
+            ),
+          ),
+          body: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 1,
+                color: Colors.grey,
+              ),
+              SingleChildScrollView(
+                child: Column(
+                  children: items,
+                ),
+              )
+            ],
+          ),
+        ),
+        onWillPop: () async {
+          SystemNavigator.pop();
+          return true;
+        });
   }
 
   Widget _addLike() {

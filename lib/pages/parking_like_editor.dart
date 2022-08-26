@@ -40,161 +40,166 @@ class _PageParkingLikeEditorState extends State<PageParkingLikeEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "자주 가는 주차장",
-          style: TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop({
-              'type': _likeModel.type,
-              'likeName': _likeModel.likeName,
-              'likeAddress': _likeModel.likeAddress
-            });
-          },
-        ),
-      ),
-      body: Column(children: [
-        Container(
-          width: double.infinity,
-          height: 1,
-          color: Colors.grey,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                child: _icon(),
+    return WillPopScope(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: const Text(
+              "자주 가는 주차장",
+              style: TextStyle(color: Colors.black),
+            ),
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
               ),
-              Expanded(
-                  child: Column(
+              onPressed: () {
+                Navigator.of(context).pop({
+                  'type': _likeModel.type,
+                  'likeName': _likeModel.likeName,
+                  'likeAddress': _likeModel.likeAddress
+                });
+              },
+            ),
+          ),
+          body: Column(children: [
+            Container(
+              width: double.infinity,
+              height: 1,
+              color: Colors.grey,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 30,
-                    child: TextField(
-                      controller: _controller,
-                      onChanged: (text) {
-                        setState(() {
-                          _likeModel.likeName = text;
-                        });
-                      },
-                      decoration: const InputDecoration(),
-                    ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    child: _icon(),
                   ),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        child: TextField(
+                          controller: _controller,
+                          onChanged: (text) {
+                            setState(() {
+                              _likeModel.likeName = text;
+                            });
+                          },
+                          decoration: const InputDecoration(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                    ],
+                  )),
                   const SizedBox(
-                    height: 8,
-                  ),
+                    width: 21,
+                  )
                 ],
-              )),
-              const SizedBox(
-                width: 21,
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Card(
-            elevation: 0,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            color: const Color(0xffF3F3F3),
-            child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Text(
-                      _likeModel.likeAddress ?? "",
-                      style: const TextStyle(
-                          fontSize: 16, color: Color(0xff6B7684)),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                        onPressed: () async {
-                          String address =
-                              await ParkingLikeMethod.searchAddress(
-                                  _likeModel.likeAddress ?? "");
-                          setState(() {
-                            _likeModel.likeAddress = address;
-                          });
-                        },
-                        icon: const Icon(Icons.map_outlined))
-                  ],
-                )),
-          ),
-        )
-      ]),
-      bottomSheet: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: Row(
-            children: [
-              Expanded(
-                  child: MaterialButton(
-                onPressed: () async {
-                  // 키보드 내리기
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  // 대기
-                  await Future.delayed(const Duration(milliseconds: 200));
-                  // 데이터 제거
-                  await _dataStorageLocal.deleteLikeItem(_likeModel);
-                  // 데이터 전달
-                  Navigator.of(context).pop();
-                },
-                height: 48,
-                color: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Color(0xffBCBCBE)),
-                    borderRadius: BorderRadius.circular(10)),
-                child: const Text(
-                  "삭제",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              )),
-              const SizedBox(
-                width: 16,
               ),
-              Expanded(
-                  child: MaterialButton(
-                onPressed: () async {
-                  // 데이터 저장
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  await Future.delayed(const Duration(milliseconds: 200));
-                  await _dataStorageLocal.insertLikeItem(_likeModel);
-                  Navigator.of(context).pop();
-                },
-                height: 48,
-                color: const Color(0xffFFE146),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Card(
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Color(0xffFFE146)),
-                    borderRadius: BorderRadius.circular(10)),
-                child: const Text(
-                  "저장",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              )),
-            ],
+                    borderRadius: BorderRadius.circular(8)),
+                color: const Color(0xffF3F3F3),
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Text(
+                          _likeModel.likeAddress ?? "",
+                          style: const TextStyle(
+                              fontSize: 16, color: Color(0xff6B7684)),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                            onPressed: () async {
+                              String address =
+                                  await ParkingLikeMethod.searchAddress(
+                                      _likeModel.likeAddress ?? "");
+                              setState(() {
+                                _likeModel.likeAddress = address;
+                              });
+                            },
+                            icon: const Icon(Icons.map_outlined))
+                      ],
+                    )),
+              ),
+            )
+          ]),
+          bottomSheet: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: MaterialButton(
+                    onPressed: () async {
+                      // 키보드 내리기
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      // 대기
+                      await Future.delayed(const Duration(milliseconds: 200));
+                      // 데이터 제거
+                      await _dataStorageLocal.deleteLikeItem(_likeModel);
+                      // 데이터 전달
+                      Navigator.of(context).pop();
+                    },
+                    height: 48,
+                    color: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Color(0xffBCBCBE)),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: const Text(
+                      "삭제",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                      child: MaterialButton(
+                    onPressed: () async {
+                      // 데이터 저장
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      await Future.delayed(const Duration(milliseconds: 200));
+                      await _dataStorageLocal.insertLikeItem(_likeModel);
+                      Navigator.of(context).pop();
+                    },
+                    height: 48,
+                    color: const Color(0xffFFE146),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Color(0xffFFE146)),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: const Text(
+                      "저장",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
-    );
+        onWillPop: () async {
+          Navigator.of(context).pop();
+          return true;
+        });
   }
 
   Widget _icon() {

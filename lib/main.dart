@@ -36,9 +36,9 @@ List<Future> systemChromeTask = [
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
-  // SystemChrome.setSystemUIOverlayStyle(
-  //     const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  // ErrorWidget.builder = (FlutterErrorDetails details) => Container();
+  // Status bar 투명하게 처리
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   await Future.wait(systemChromeTask);
 
   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
@@ -57,10 +57,10 @@ class MyApp extends StatelessWidget {
       //   primaryColor: Colors.white,
       //   primarySwatch: Colors.lightBlue,
       // ),
-      initialRoute: "/like",
+      initialRoute: "/",
       routes: {
         "/": (context) => const PageParkingDetail(),
-        "/like": (context) => const PageParkingLikePage(),
+        "/like": (context) => const PageParkingLike(),
         "/parking_detail": (context) => const PageParkingDetail(),
       },
     );

@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class ParkingHeader extends StatelessWidget {
-  final String headerTitle;
+  final String parkingTitle;
+  final List<String> parkingTags;
+  final String parkingAddress;
 
-  const ParkingHeader({Key? key, required this.headerTitle}) : super(key: key);
+  const ParkingHeader(
+      {Key? key,
+      required this.parkingTitle,
+      required this.parkingTags,
+      required this.parkingAddress})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +30,13 @@ class ParkingHeader extends StatelessWidget {
         final opacityReverse = 1.0 - opacity;
         final c =
             (255 - (255 * Interval(fadeStart, fadeEnd).transform(t))).toInt();
-        print("c : ${c}");
         final cc = Color.fromARGB(255, c, c, c);
         // final cc = Colors.white;
-        Color(0x0);
         return Stack(
           children: [
-            SizedBox(
-              height: 350,
+            Container(
+              color: Colors.white,
+              height: 280,
               width: double.infinity,
               child: Opacity(
                 opacity: opacity,
@@ -41,22 +47,27 @@ class ParkingHeader extends StatelessWidget {
                       child: Container(
                         color: Colors.blue,
                         width: double.infinity,
-                        child: Image.network(
-                          'https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+                        child: Image.asset(
+                          'assets/parking_image.png',
                           fit: BoxFit.cover,
                         ),
+                        // child: Image.network(
+                        //   'https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+                        //   fit: BoxFit.cover,
+                        // ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 18, horizontal: 18),
-                      child: SizedBox(
+                      child: Container(
+                        color: Colors.white,
                         height: 100,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              headerTitle,
+                              parkingTitle,
                               textAlign: TextAlign.start,
                               style: const TextStyle(
                                   fontSize: 26, fontWeight: FontWeight.bold),
@@ -64,14 +75,23 @@ class ParkingHeader extends StatelessWidget {
                             const SizedBox(
                               height: 8,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Text("#지하주차장"),
-                                Text("#엘리베이터"),
-                                Text("#경사로"),
-                              ],
+                            Wrap(
+                              children:
+                                  List.generate(parkingTags.length, (index) {
+                                var isLast = index == parkingTags.length - 1;
+                                if (isLast) {
+                                  return Text(
+                                    "#${parkingTags[index]} ",
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Color(0xff6B7684)),
+                                  );
+                                }
+                                return Text(
+                                  "#${parkingTags[index]} |",
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Color(0xff6B7684)),
+                                );
+                              }),
                             ),
                             const SizedBox(
                               height: 8,
@@ -79,12 +99,17 @@ class ParkingHeader extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(
+                              children: [
+                                const Icon(
                                   Icons.location_on,
                                   color: Colors.blue,
+                                  size: 15,
                                 ),
-                                Text("서울 중구 세종대로 93(태평로2가)")
+                                Text(
+                                  parkingAddress,
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Color(0xff6B7684)),
+                                )
                               ],
                             ),
                           ],
@@ -99,7 +124,6 @@ class ParkingHeader extends StatelessWidget {
               opacity: opacityReverse,
               child: Container(
                 height: statusHeight + kToolbarHeight,
-                color: Colors.white,
                 child: Container(
                   alignment: Alignment.center,
                   height: kToolbarHeight,
@@ -107,8 +131,8 @@ class ParkingHeader extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      headerTitle,
-                      style: const TextStyle(fontSize: 21),
+                      parkingTitle,
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ),
                 ),
