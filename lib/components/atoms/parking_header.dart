@@ -21,7 +21,12 @@ class ParkingHeader extends StatelessWidget {
         const fadeEnd = 1.0;
         final opacity = 1.0 - Interval(fadeStart, fadeEnd).transform(t);
         final opacityReverse = 1.0 - opacity;
-
+        final c =
+            (255 - (255 * Interval(fadeStart, fadeEnd).transform(t))).toInt();
+        print("c : ${c}");
+        final cc = Color.fromARGB(255, c, c, c);
+        // final cc = Colors.white;
+        Color(0x0);
         return Stack(
           children: [
             SizedBox(
@@ -119,7 +124,7 @@ class ParkingHeader extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
+                    icon: Icon(Icons.arrow_back_ios, color: cc),
                     onPressed: () {},
                   ),
                 ),

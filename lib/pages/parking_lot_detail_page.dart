@@ -13,10 +13,7 @@ class _ParkingLotDetailPageState extends State<ParkingLotDetailPage> {
   Widget build(BuildContext context) {
     return CoordinatorLayout(
       headerMaxHeight: 200,
-      headerMinHeight: kToolbarHeight + MediaQuery
-          .of(context)
-          .padding
-          .top,
+      headerMinHeight: kToolbarHeight + MediaQuery.of(context).padding.top,
       headers: [
         Builder(builder: (context) {
           return SliverOverlapAbsorber(
