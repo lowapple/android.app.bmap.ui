@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter/services.dart';
+
 class ParkingHeader extends StatelessWidget {
   final String parkingTitle;
   final List<String> parkingTags;
@@ -122,7 +124,7 @@ class ParkingHeader extends StatelessWidget {
             ),
             Opacity(
               opacity: opacityReverse,
-              child: Container(
+              child: SizedBox(
                 height: statusHeight + kToolbarHeight,
                 child: Container(
                   alignment: Alignment.center,
@@ -149,7 +151,9 @@ class ParkingHeader extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: IconButton(
                     icon: Icon(Icons.arrow_back_ios, color: cc),
-                    onPressed: () {},
+                    onPressed: () {
+                      SystemNavigator.pop();
+                    },
                   ),
                 ),
               ),

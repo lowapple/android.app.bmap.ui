@@ -7,8 +7,9 @@ import 'package:bmap/di/di.dart';
 import 'package:bmap/models/like_model.dart';
 import 'package:bmap/models/park_detail.dart';
 import 'package:bmap/models/park_facilities.dart';
-import 'package:bmap/pages/parking_like.dart';
+import 'package:bmap/pages/navigation_page.dart';
 import 'package:bmap/pages/parking_like_editor.dart';
+import 'package:crypto/crypto.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class PageParkingDetail extends StatefulWidget {
 }
 
 class _PageParkingDetailState extends State<PageParkingDetail> {
+  final platform = const MethodChannel('/parking');
   final network = getIt<DataNetwork>();
 
   late ScrollController _scrollController;
@@ -123,16 +125,16 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
   }
 
   Future<void> _loadData() async {
-    // const platform = MethodChannel('/parking');
-    // final resRaw = await platform.invokeMethod("loadData");
-    // final res = json.decode(resRaw);
-    // _parkDetail = ParkDetail.fromJson(res);
-    // _parkFacilities = await network.getParkFacilities(_parkDetail.parkCode!);
+    final resRaw = await platform.invokeMethod("loadData");
+    final res = json.decode(resRaw);
+    _parkDetail = ParkDetail.fromJson(res);
+    setState(() {});
+    _parkFacilities = await network.getParkFacilities(_parkDetail.parkCode!);
 
-    _parkFacilities = ParkFacilities.fromJson({});
-    _parkFacilities.elevator = true;
-    _parkFacilities.wideExit = true;
-    _parkFacilities.ramp = true;
+    // _parkFacilities = ParkFacilities.fromJson({});
+    // _parkFacilities.elevator = true;
+    // _parkFacilities.wideExit = true;
+    // _parkFacilities.ramp = true;
 
     // 엘리베이터
     if (_parkFacilities.elevator!) {
@@ -207,11 +209,37 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
       const SizedBox(
         height: 4,
       ),
-      _parkingBottomBox()
+      _parkingBottomBox(),
+      const SizedBox(
+        height: 64,
+      )
     ];
 
     return Scaffold(
       backgroundColor: const Color(0xffe7e7e7),
+      bottomSheet: Container(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Expanded(
+              child: MaterialButton(
+            onPressed: () async {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const NavigationPage()));
+            },
+            height: 48,
+            color: const Color(0xffFFE146),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+                side: const BorderSide(color: Color(0xffFFE146)),
+                borderRadius: BorderRadius.circular(10)),
+            child: const Text(
+              "목적지 설정",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          )),
+        ),
+      ),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
@@ -221,14 +249,14 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
             pinned: true,
             snap: false,
             floating: false,
-            expandedHeight: 300,
+            expandedHeight: 270,
             flexibleSpace: ParkingHeader(
               parkingTitle: _parkDetail.parkName ?? '한영 빌딩 주차장',
               parkingTags:
                   _currentFacilities.map((e) => e['name'].toString()).toList(),
               parkingAddress: _parkDetail.newAddr ?? '서울 중구 세종대로 93(태평로2가)',
             ),
-            bottom: PreferredSize(
+            bottom: const PreferredSize(
                 preferredSize: Size.fromHeight(0), child: SizedBox()),
           ),
           SliverList(
@@ -253,11 +281,24 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
   }
 
   Widget _parkingIoTStatBox() {
+    String statusString;
+    String statusIcon;
+    if (_parkDetail.parkState == "만차") {
+      statusIcon = 'assets/parking_no.png';
+      statusString = "자리가 없어요";
+    } else if (_parkDetail.parkState == "혼잡") {
+      statusIcon = 'assets/parking_war.png';
+      statusString = "자리가 혼잡해요";
+    } else {
+      statusIcon = 'assets/parking_yes.png';
+      statusString = "자리가 여유있어요";
+    }
+
     return Container(
       width: double.infinity,
       color: const Color(0xffe7e7e8),
       child: Padding(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.only(top: 4, bottom: 8, left: 16, right: 16),
         child: Column(
           children: [
             Card(
@@ -271,34 +312,34 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
                     SizedBox(
                       width: 53,
                       height: 53,
-                      child: Image.asset('assets/parking_no.png'),
+                      child: Image.asset(statusIcon),
                     ),
                     const SizedBox(
                       height: 14,
                     ),
-                    const Text(
-                      "자리가 없어요",
-                      style:
-                          TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                    Text(
+                      statusString,
+                      style: const TextStyle(
+                          fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 14,
                     ),
                     RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                             text: "장애인전용 ",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16, color: Color(0xff6B7684)),
                             children: [
                           TextSpan(
-                              text: "3",
-                              style: TextStyle(
+                              text: _parkDetail.nowParkCount ?? "1",
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold)),
                           TextSpan(
-                              text: "/3",
-                              style: TextStyle(
+                              text: "/${_parkDetail.maxParkCount ?? "3"}",
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold))
@@ -547,7 +588,10 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
                 child: ListTile(
                     title: Text(
                       _currentFacilities[index]['name'],
-                      style: const TextStyle(fontSize: 17, color: Colors.black),
+                      style: const TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
                     ),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 8),
@@ -572,15 +616,29 @@ class _PageParkingDetailState extends State<PageParkingDetail> {
 
   Widget _parkingBottomBox() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 32),
       color: Colors.white,
       child: Row(
         children: [
           Expanded(
-            child: roundedIconButton((Icons.star_border), "즐겨찾기", () async {}),
+            child: roundedIconButton((Icons.star_border), "즐겨찾기", () async {
+              final id = _parkDetail.parkCode!.toString();
+              var cid = utf8.encode(id).reduce((a, b) => a + b);
+
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PageParkingLikeEditor(
+                        likeModel: LikeModel(
+                            id: cid,
+                            type: 'like',
+                            likeName: _parkDetail.parkName,
+                            likeAddress: _parkDetail.newAddr),
+                      )));
+            }),
           ),
           Expanded(
-            child: roundedIconButton((Icons.edit), "신고", () async {}),
+            child: roundedIconButton((Icons.edit), "신고", () async {
+              await platform.invokeMethod("launchReport");
+            }),
           ),
           Expanded(
             child: roundedIconButton((Icons.ios_share), "공유", () async {}),

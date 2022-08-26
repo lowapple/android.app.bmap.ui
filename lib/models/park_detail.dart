@@ -2,15 +2,21 @@ class ParkDetail {
   String? parkCode;
   String? parkName;
   String? newAddr;
-  double? latitude;
-  double? longitude;
+  String? latitude;
+  String? longitude;
+  String? parkState;
+  String? nowParkCount;
+  String? maxParkCount;
 
   ParkDetail(
       {this.parkCode,
       this.parkName,
       this.newAddr,
       this.latitude,
-      this.longitude});
+      this.longitude,
+      this.parkState,
+      this.maxParkCount,
+      this.nowParkCount});
 
   ParkDetail.fromJson(Map<String, dynamic> json) {
     parkCode = json['parkCode'];
@@ -18,6 +24,9 @@ class ParkDetail {
     newAddr = json['newAddr'];
     latitude = json['latitude'];
     longitude = json['longitude'];
+    parkState = json['parkState'];
+    nowParkCount = json['nowParkCount'];
+    maxParkCount = json['maxParkCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -27,6 +36,9 @@ class ParkDetail {
     data['newAddr'] = newAddr;
     data['latitude'] = latitude;
     data['longitude'] = longitude;
+    data['parkState'] = parkState;
+    data['nowParkCount'] = nowParkCount;
+    data['maxParkCount'] = maxParkCount;
     return data;
   }
 }

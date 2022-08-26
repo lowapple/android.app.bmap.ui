@@ -1,4 +1,5 @@
 import 'package:bmap/di/di.dart';
+import 'package:bmap/pages/navigation_page.dart';
 import 'package:bmap/pages/parking_like.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -57,11 +58,12 @@ class MyApp extends StatelessWidget {
       //   primaryColor: Colors.white,
       //   primarySwatch: Colors.lightBlue,
       // ),
-      initialRoute: "/",
+      initialRoute: "/navigation",
       routes: {
         "/": (context) => const PageParkingDetail(),
         "/like": (context) => const PageParkingLike(),
         "/parking_detail": (context) => const PageParkingDetail(),
+        "/navigation": (context) => const NavigationPage()
       },
     );
   }
