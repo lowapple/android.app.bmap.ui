@@ -44,6 +44,7 @@ class _PageParkingLikeEditorState extends State<PageParkingLikeEditor> {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            centerTitle: true,
             title: const Text(
               "자주 가는 주차장",
               style: TextStyle(color: Colors.black),
@@ -52,7 +53,7 @@ class _PageParkingLikeEditorState extends State<PageParkingLikeEditor> {
             backgroundColor: Colors.white,
             leading: IconButton(
               icon: const Icon(
-                Icons.arrow_back_ios,
+                Icons.arrow_back_ios_new_rounded,
                 color: Colors.black,
               ),
               onPressed: () {

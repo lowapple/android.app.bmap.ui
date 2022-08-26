@@ -105,10 +105,11 @@ class _PageParkingLikeState extends State<PageParkingLike> {
               style: TextStyle(color: Colors.black),
             ),
             elevation: 0,
+            centerTitle: true,
             backgroundColor: Colors.white,
             leading: IconButton(
               icon: const Icon(
-                Icons.arrow_back_ios,
+                Icons.arrow_back_ios_new_rounded,
                 color: Colors.black,
               ),
               onPressed: () {
